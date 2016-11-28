@@ -1,12 +1,4 @@
 # game
 游戏制作相关
 
-tinypng.com
-
-optipng
-
-http://www.tuhaokuai.com/image?b-png
-
-http://pngcrush.com/
-
-https://pngquant.org/
+[png图片压缩](https://pngquant.org/)

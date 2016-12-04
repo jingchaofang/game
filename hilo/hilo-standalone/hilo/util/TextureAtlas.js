@@ -194,7 +194,7 @@ function parseTextureFrames(atlasData){
 
     var frames = [], obj;
 
-    if(frameData instanceof Array){ //frames by array
+    if(frameData instanceof Array){ //frames by array 纹理集帧数据为数组格式
         for(var i = 0, len = frameData.length; i < len; i++){
             obj = frameData[i];
             frames[i] = {
@@ -202,7 +202,7 @@ function parseTextureFrames(atlasData){
                 rect: obj
             };
         }
-    }else{ //frames by object
+    }else{ //frames by object 纹理集帧数据为对象格式，每帧宽高设计一致
         var frameWidth = frameData.frameWidth;
         var frameHeight = frameData.frameHeight;
         var cols = atlasData.width / frameWidth | 0;
@@ -216,7 +216,7 @@ function parseTextureFrames(atlasData){
         }
     }
 
-    return frames;
+    return frames; // 返回每帧的rect集
 }
 
 /**
@@ -227,7 +227,7 @@ function parseTextureFrames(atlasData){
 
 /**
  * @language=zh
- * 解析精灵数据。
+ * 解析纹理集中的精灵数据。
  * @private
  */
 function parseTextureSprites(atlasData, frames){
@@ -238,9 +238,9 @@ function parseTextureSprites(atlasData, frames){
 
     for(var s in spriteData){
         sprite = spriteData[s];
-        if(isNumber(sprite)){ //single frame
+        if(isNumber(sprite)){ //single frame 若为Number，即此精灵只包含一帧
             spriteFrames = translateSpriteFrame(frames[sprite]);
-        }else if(sprite instanceof Array){ //frames by array
+        }else if(sprite instanceof Array){ //frames by array 若为Array，则每项均为一个帧的索引值
             spriteFrames = [];
             for(var i = 0, len = sprite.length; i < len; i++){
                 var spriteObj = sprite[i], frameObj;
@@ -253,7 +253,7 @@ function parseTextureSprites(atlasData, frames){
                 }
                 spriteFrames[i] = spriteFrame;
             }
-        }else{ //frames by object
+        }else{ //frames by object 若为Object，则需包含from(起始帧索引值)、to(末帧索引值) 属性
             spriteFrames = [];
             for(var i = sprite.from; i <= sprite.to; i++){
                 spriteFrames[i - sprite.from] = translateSpriteFrame(frames[i], sprite[i]);
@@ -264,7 +264,7 @@ function parseTextureSprites(atlasData, frames){
 
     return sprites;
 }
-
+// 转换为精灵数据帧
 function translateSpriteFrame(frameObj, spriteObj){
     var spriteFrame = {
         image: frameObj.image,

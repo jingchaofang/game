@@ -9,30 +9,31 @@ var OverScene = ns.OverScene = Hilo.Class.create({
     },
 
     init: function(properties){
+        // 结束面板
         var board = new Hilo.Bitmap({
             id: 'board',
             image: properties.image,
             rect: [0, 0, 590, 298]
         });
-
+        // Game Over图片文字
         var gameover = new Hilo.Bitmap({
             id: 'gameover',
             image: properties.image,
             rect: [0, 298, 508, 158]
         });
-
+        // 开始按钮
         var startBtn = new Hilo.Bitmap({
             id: 'start',
             image: properties.image,
             rect: [590, 0, 290, 176]
         });
-
+        // 等级按钮
         var gradeBtn = new Hilo.Bitmap({
             id: 'grade',
             image: properties.image,
             rect: [590, 176, 290, 176]
         });
-
+        // 玩家当前分数
         var scoreLabel = new Hilo.BitmapText({
             id: 'score',
             glyphs: properties.numberGlyphs,
@@ -41,7 +42,7 @@ var OverScene = ns.OverScene = Hilo.Class.create({
             letterSpacing: 4,
             text: 0
         });
-
+        // 玩家最好成绩
         var bestLabel = new Hilo.BitmapText({
             id: 'best',
             glyphs: properties.numberGlyphs,
@@ -50,7 +51,7 @@ var OverScene = ns.OverScene = Hilo.Class.create({
             letterSpacing: 4,
             text: 0
         });
-
+        // 白色遮罩效果
         var whiteMask = new Hilo.View({
             id: 'mask',
             width: this.width,
@@ -58,7 +59,7 @@ var OverScene = ns.OverScene = Hilo.Class.create({
             alpha: 0.0,
             background:'#fff'
         });
-
+        // 设置各个元素的坐标位置
         board.x = this.width - board.width >> 1;
         board.y = this.height - board.height >> 1;
         gameover.x = this.width - gameover.width >> 1;
@@ -74,7 +75,8 @@ var OverScene = ns.OverScene = Hilo.Class.create({
 
         this.addChild(gameover, board, startBtn, gradeBtn, scoreLabel, bestLabel, whiteMask);
     },
-
+    // 结束场景显示的时候，不仅需要显示玩家的得分，出现的时候还是带动画效果显示出来的。
+    // 这里，我们可以使用之前介绍过的Tween缓动变化类来实现这个过场动画。
     show: function(score, bestScore){
         this.visible = true;
         this.getChildById('score').setText(score);

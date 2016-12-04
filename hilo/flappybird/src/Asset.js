@@ -8,14 +8,21 @@
 
 var Asset = ns.Asset = Hilo.Class.create({
     Mixes: Hilo.EventMixin,
-
+    // 队列
     queue: null,
+    // 背景
     bg: null,
+    // 地面
     ground: null,
+    // 预备
     ready: null,
+    // 结束
     over: null,
+    // 数字字符
     numberGlyphs: null,
+    // 小鸟图集
     birdAtlas: null,
+    // 障碍
     holdback: null,
 
     load: function(){

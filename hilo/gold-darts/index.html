@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="referrer" content="never">
+    <meta name="format-detection" content="telephone=no">
+    <title>双十二夺金币</title>
+    <style>
+    body,
+    div,
+    canvas {
+        image-rendering: optimizeSpeed;
+        -webkit-image-rendering: optimizeSpeed;
+        -webkit-interpolation-mode: nearest-neighbor;
+    }
+    
+    body {
+        padding: 0;
+        margin: 0;
+        font-size: 12px;
+        background: url(./i/bg.png) repeat #0086cf;
+    }
+    
+    body,
+    html {
+        position: relative;
+        height: 100%;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    </style>
+    <script>
+    var resourceArray = [{id:'bg', src:'i/bg.png'},
+            {id:'startSprite', src:'/i/start_sprite.png'},
+            {id:'ring', src:'i/ring.png'},
+            {id:'role', src:'i/role.png'},
+            {id:'smoke', src:'i/smoke.png'},
+            {id:'gd', src:'i/gd.png'}];
+    </script>
+    <script src="js/hilo-standalone.min.js"></script>
+    <script src="js/Game.js"></script>
+    <script src="js/Asset.js"></script>
+    <script src="js/Start.js"></script>
+    <script src="js/ReadyScene.js"></script>
+    <script src="js/Role.js"></script>
+    <script src="js/Smoke.js"></script>
+    <script src="js/GD.js"></script>
+    
+</head>
+
+<body>
+
+    <script>
+    var flag = true;
+        function beforeGame() {
+            return flag;
+        }
+    </script>
+</body>
+
+</html>

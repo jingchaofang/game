@@ -33,6 +33,31 @@ var CacheMixin = Hilo.CacheMixin;
  * @property {Number} textWidth Width of the text, readonly! Works only on canvas mode.
  * @property {Number} textHeight Height of the text, readonly! Works only on canvas mode.
  */
+
+
+/**
+ * @language=zh
+ * <iframe src='../../../examples/Text.html?noHeader' width = '320' height = '240' scrolling='no'></iframe>
+ * <br/>
+ * @class Text类提供简单的文字显示功能。复杂的文本功能可以使用DOMElement。
+ * @augments View
+ * @param {Object} properties 创建对象的属性参数。可包含此类所有可写属性。
+ * @module hilo/view/Text
+ * @requires hilo/core/Class
+ * @requires hilo/core/Hilo
+ * @requires hilo/view/View
+ * @requires hilo/view/CacheMixin
+ * @property {String} text 指定要显示的文本内容。
+ * @property {String} color 指定使用的字体颜色。
+ * @property {String} textAlign 指定文本的对齐方式。可以是以下任意一个值：'start', 'end', 'left', 'right', and 'center'。
+ * @property {String} textVAlign 指定文本的垂直对齐方式。可以是以下任意一个值：'top', 'middle', 'bottom'。
+ * @property {Boolean} outline 指定文本是绘制边框还是填充。
+ * @property {Number} lineSpacing 指定文本的行距。单位为像素。默认值为0。
+ * @property {Number} maxWidth 指定文本的最大宽度。默认值为200。
+ * @property {String} font 文本的字体CSS样式。只读属性。设置字体样式请用setFont方法。
+ * @property {Number} textWidth 指示文本内容的宽度，只读属性。仅在canvas模式下有效。
+ * @property {Number} textHeight 指示文本内容的高度，只读属性。仅在canvas模式下有效。
+ */
 var Text = Class.create(/** @lends Text.prototype */{
     Extends: View,
     Mixes:CacheMixin,
@@ -63,6 +88,13 @@ var Text = Class.create(/** @lends Text.prototype */{
      * @param {String} font Text CSS font style to set.
      * @returns {Text} the Text object, chained call supported.
      */
+    
+    /**
+     * @language=zh
+     * 设置文本的字体CSS样式。
+     * @param {String} font 要设置的字体CSS样式。
+     * @returns {Text} Text对象本身。链式调用支持。
+     */
     setFont: function(font){
         var me = this;
         if(me.font !== font){
@@ -76,6 +108,12 @@ var Text = Class.create(/** @lends Text.prototype */{
     /**
      * @language=en
      * Overwrite render function.
+     * @private
+     */
+    
+    /**
+     * @language=zh
+     * 覆盖渲染方法。
      * @private
      */
     render: function(renderer, delta){
@@ -109,6 +147,12 @@ var Text = Class.create(/** @lends Text.prototype */{
     /**
      * @language=en
      * Draw text under the assigned render context.
+     * @private
+     */
+    
+    /**
+     * @language=zh
+     * 在指定的渲染上下文上绘制文本。
      * @private
      */
     _draw: function(context){
@@ -204,6 +248,12 @@ var Text = Class.create(/** @lends Text.prototype */{
      * Draw a line of text under the assigned render context.
      * @private
      */
+    
+    /**
+     * @language=zh
+     * 在指定的渲染上下文上绘制一行文本。
+     * @private
+     */
     _drawTextLine: function(context, text, y){
         var me = this, x = 0, width = me.width;
 
@@ -227,6 +277,13 @@ var Text = Class.create(/** @lends Text.prototype */{
          * Measure the line height of the assigned text font style.
          * @param {String} font Font style to measure.
          * @return {Number} Return line height of the assigned font style.
+         */
+        
+        /**
+         * @language=zh
+         * 测算指定字体样式的行高。
+         * @param {String} font 指定要测算的字体样式。
+         * @return {Number} 返回指定字体的行高。
          */
         measureFontHeight: function(font){
             var docElement = document.documentElement, fontHeight;

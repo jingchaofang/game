@@ -51,6 +51,50 @@ var Class = Hilo.Class;
  * @property {Function} onUpdate Function invoked on tweening update. Require 2 parameters: ratio, tween.  default value is null.
  * @property {Function} onComplete Function invoked on the end of tweening. Require 1 parameter: tween.  default value is null.
  */
+
+/**
+ * @language=zh
+ * <iframe src='../../../examples/Tween.html?noHeader' width = '550' height = '130' scrolling='no'></iframe>
+ * <br/>
+ * 使用示例:
+ * <pre>
+ * ticker.addTick(Hilo.Tween);//需要把Tween加到ticker里才能使用
+ *
+ * var view = new View({x:5, y:10});
+ * Hilo.Tween.to(view, {
+ *     x:100,
+ *     y:20,
+ *     alpha:0
+ * }, {
+ *     duration:1000,
+ *     delay:500,
+ *     ease:Hilo.Ease.Quad.EaseIn,
+ *     onComplete:function(){
+ *         console.log('complete');
+ *     }
+ * });
+ * </pre>
+ * @class Tween类提供缓动功能。
+ * @param {Object} target 缓动对象。
+ * @param {Object} fromProps 对象缓动的起始属性集合。
+ * @param {Object} toProps 对象缓动的目标属性集合。
+ * @param {Object} params 缓动参数。可包含Tween类所有可写属性。
+ * @module hilo/tween/Tween
+ * @requires hilo/core/Class
+ * @property {Object} target 缓动目标。只读属性。
+ * @property {Int} duration 缓动总时长。单位毫秒。
+ * @property {Int} delay 缓动延迟时间。单位毫秒。
+ * @property {Boolean} paused 缓动是否暂停。默认为false。
+ * @property {Boolean} loop 缓动是否循环。默认为false。
+ * @property {Boolean} reverse 缓动是否反转播放。默认为false。
+ * @property {Int} repeat 缓动重复的次数。默认为0。
+ * @property {Int} repeatDelay 缓动重复的延迟时长。单位为毫秒。
+ * @property {Function} ease 缓动变化函数。默认为null。
+ * @property {Int} time 缓动已进行的时长。单位毫秒。只读属性。
+ * @property {Function} onStart 缓动开始回调函数。它接受1个参数：tween。默认值为null。
+ * @property {Function} onUpdate 缓动更新回调函数。它接受2个参数：ratio和tween。默认值为null。
+ * @property {Function} onComplete 缓动结束回调函数。它接受1个参数：tween。默认值为null。
+ */
 var Tween = (function(){
 
 function now(){
@@ -108,6 +152,14 @@ return Class.create(/** @lends Tween.prototype */{
      * @param {Object} toProps Ending properties of target tweening object.
      * @returns {Tween} Current Tween, for chain calls.
      */
+    
+    /**
+     * @language=zh
+     * 设置缓动对象的初始和目标属性。
+     * @param {Object} fromProps 缓动对象的初始属性。
+     * @param {Object} toProps 缓动对象的目标属性。
+     * @returns {Tween} Tween变换本身。可用于链式调用。
+     */
     setProps: function(fromProps, toProps){
         var me = this, target = me.target,
             propNames = fromProps || toProps,
@@ -128,6 +180,12 @@ return Class.create(/** @lends Tween.prototype */{
      * Starting the tweening.
      * @returns {Tween} Current Tween, for chain calls.
      */
+    
+    /**
+     * @language=zh
+     * 启动缓动动画的播放。
+     * @returns {Tween} Tween变换本身。可用于链式调用。
+     */
     start: function(){
         var me = this;
         me._startTime = now() + me.delay;
@@ -143,6 +201,12 @@ return Class.create(/** @lends Tween.prototype */{
      * Stop the tweening.
      * @returns {Tween} Current Tween, for chain calls.
      */
+    
+    /**
+     * @language=zh
+     * 停止缓动动画的播放。
+     * @returns {Tween} Tween变换本身。可用于链式调用。
+     */
     stop: function(){
         Tween.remove(this);
         return this;
@@ -152,6 +216,12 @@ return Class.create(/** @lends Tween.prototype */{
      * @language=en
      * Pause the tweening.
      * @returns {Tween} Current Tween, for chain calls.
+     */
+    
+    /**
+     * @language=zh
+     * 暂停缓动动画的播放。
+     * @returns {Tween} Tween变换本身。可用于链式调用。
      */
     pause: function(){
         var me = this;
@@ -164,6 +234,12 @@ return Class.create(/** @lends Tween.prototype */{
      * @language=en
      * Continue to play the tweening.
      * @returns {Tween} Current Tween, for chain calls.
+     */
+    
+    /**
+     * @language=zh
+     * 恢复缓动动画的播放。
+     * @returns {Tween} Tween变换本身。可用于链式调用。
      */
     resume: function(){
         var me = this;
@@ -179,6 +255,14 @@ return Class.create(/** @lends Tween.prototype */{
      * @param {Number} time The time to jump to, range from 0 to duration.
      * @param {Boolean} pause Is paused.
      * @returns {Tween} Current Tween, for chain calls.
+     */
+    
+    /**
+     * @language=zh
+     * 跳转Tween到指定的时间。
+     * @param {Number} time 指定要跳转的时间。取值范围为：0 - duraion。
+     * @param {Boolean} pause 是否暂停。
+     * @returns {Tween} Tween变换本身。可用于链式调用。
      */
     seek: function(time, pause){
         var me = this, current = now();
@@ -196,6 +280,13 @@ return Class.create(/** @lends Tween.prototype */{
      * Link next Tween. The beginning time of next Tween depends on the delay value. If delay is a string that begins with '+' or '-', next Tween will begin at (delay) ms after or before the current tween is ended. If delay is out of previous situation, next Tween will begin at (delay) ms after the beginning point of current Tween.
      * @param {Tween} tween Tween to link.
      * @returns {Tween} Current Tween, for chain calls.
+     */
+    
+    /**
+     * @language=zh
+     * 连接下一个Tween变换。其开始时间根据delay值不同而不同。当delay值为字符串且以'+'或'-'开始时，Tween的开始时间从当前变换结束点计算，否则以当前变换起始点计算。
+     * @param {Tween} tween 要连接的Tween变换。
+     * @returns {Tween} Tween变换本身。可用于链式调用。
      */
     link: function(tween){
         var me = this, delay = tween.delay, startTime = me._startTime;
@@ -217,6 +308,12 @@ return Class.create(/** @lends Tween.prototype */{
      * Private render method inside Tween class.
      * @private
      */
+    
+    /**
+     * @language=zh
+     * Tween类的内部渲染方法。
+     * @private
+     */
     _render: function(ratio){
         var me = this, target = me.target, fromProps = me._fromProps, p;
         for(p in fromProps) target[p] = fromProps[p] + (me._toProps[p] - fromProps[p]) * ratio;
@@ -225,6 +322,12 @@ return Class.create(/** @lends Tween.prototype */{
     /**
      * @language=en
      * Private update method inside Tween class.
+     * @private
+     */
+    
+    /**
+     * @language=zh
+     * Tween类的内部更新方法。
      * @private
      */
     _update: function(time, forceUpdate){
@@ -311,6 +414,12 @@ return Class.create(/** @lends Tween.prototype */{
          * Update all Tween instances.
          * @returns {Object} Tween。
          */
+        
+        /**
+         * @language=zh
+         * 更新所有Tween实例。
+         * @returns {Object} Tween。
+         */
         tick: function(){
             var tweens = Tween._tweens, tween, i, len = tweens.length;
 
@@ -330,6 +439,13 @@ return Class.create(/** @lends Tween.prototype */{
          * @param {Tween} tween Tween object to add.
          * @returns {Object} Tween。
          */
+        
+        /**
+         * @language=zh
+         * 添加Tween实例。
+         * @param {Tween} tween 要添加的Tween对象。
+         * @returns {Object} Tween。
+         */
         add: function(tween){
             var tweens = Tween._tweens;
             if(tweens.indexOf(tween) == -1) tweens.push(tween);
@@ -340,6 +456,13 @@ return Class.create(/** @lends Tween.prototype */{
          * @language=en
          * Remove one Tween target.
          * @param {Tween|Object|Array} tweenOrTarget Tween object, target object or an array of object to remove
+         * @returns {Object} Tween。
+         */
+        
+        /**
+         * @language=zh
+         * 删除Tween实例。
+         * @param {Tween|Object|Array} tweenOrTarget 要删除的Tween对象或target对象或要删除的一组对象。
          * @returns {Object} Tween。
          */
         remove: function(tweenOrTarget){
@@ -371,6 +494,12 @@ return Class.create(/** @lends Tween.prototype */{
          * Remove all Tween instances.
          * @returns {Object} Tween。
          */
+        
+        /**
+         * @language=zh
+         * 删除所有Tween实例。
+         * @returns {Object} Tween。
+         */
         removeAll: function(){
             Tween._tweens.length = 0;
             return Tween;
@@ -384,6 +513,16 @@ return Class.create(/** @lends Tween.prototype */{
          * @param toProps Ending properties of target tweening object.
          * @param params Tweening parameters.
          * @returns {Tween|Array} An tween instance or an array of tween instance.
+         */
+        
+        /**
+         * @language=zh
+         * 创建一个缓动动画，让目标对象从开始属性变换到目标属性。
+         * @param {Object|Array} target 缓动目标对象或缓动目标数组。
+         * @param fromProps 缓动目标对象的开始属性。
+         * @param toProps 缓动目标对象的目标属性。
+         * @param params 缓动动画的参数。
+         * @returns {Tween|Array} 一个Tween实例对象或Tween实例数组。
          */
         fromTo: function(target, fromProps, toProps, params){
             var isArray = target instanceof Array;
@@ -408,6 +547,15 @@ return Class.create(/** @lends Tween.prototype */{
          * @param params Tweening parameters.
          * @returns {Tween|Array} An tween instance or an array of tween instance.
          */
+        
+        /**
+         * @language=zh
+         * 创建一个缓动动画，让目标对象从当前属性变换到目标属性。
+         * @param {Object|Array} target 缓动目标对象或缓动目标数组。
+         * @param toProps 缓动目标对象的目标属性。
+         * @param params 缓动动画的参数。
+         * @returns {Tween|Array} 一个Tween实例对象或Tween实例数组。
+         */
         to: function(target, toProps, params){
             return Tween.fromTo(target, null, toProps, params);
         },
@@ -419,6 +567,15 @@ return Class.create(/** @lends Tween.prototype */{
          * @param fromProps Beginning properties of target tweening object.
          * @param params Tweening parameters.
          * @returns {Tween|Array} An tween instance or an array of tween instance.
+         */
+        
+        /**
+         * @language=zh
+         * 创建一个缓动动画，让目标对象从指定的起始属性变换到当前属性。
+         * @param {Object|Array} target 缓动目标对象或缓动目标数组。
+         * @param fromProps 缓动目标对象的初始属性。
+         * @param params 缓动动画的参数。
+         * @returns {Tween|Array} 一个Tween实例对象或Tween实例数组。
          */
         from: function(target, fromProps, params){
             return Tween.fromTo(target, fromProps, null, params);

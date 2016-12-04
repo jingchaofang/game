@@ -131,6 +131,8 @@ var Ticker = Class.create(/** @lends Ticker.prototype */{
 
         //calculates the real fps
         if(++this._tickCount >= this._targetFPS){
+            // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators
+            // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
             this._measuredFPS = 1000 / (this._tickTime / this._tickCount) + 0.5 >> 0;
             this._tickCount = 0;
             this._tickTime = 0;

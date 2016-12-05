@@ -1,5 +1,9 @@
 # hilo
 
+定时器：
+
+帧率
+
 坐标：
 
 [element.offsetTop](https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement/offsetTop)

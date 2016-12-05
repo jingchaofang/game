@@ -16,20 +16,21 @@
         -webkit-image-rendering: optimizeSpeed;
         -webkit-interpolation-mode: nearest-neighbor;
     }
-    
     body {
         padding: 0;
         margin: 0;
         font-size: 12px;
         background: url(./i/bg.png) repeat #0086cf;
     }
-    
     body,
     html {
         position: relative;
         height: 100%;
         margin: 0 auto;
         overflow: hidden;
+    }
+    canvas {
+        margin-top: -90px;
     }
     </style>
     <script>
@@ -54,9 +55,12 @@
 <body>
 
     <script>
-    var flag = true;
+        var flag = true;
         function beforeGame() {
             return flag;
+        }
+        function gameOverCallback(data) {
+            console.log(data);
         }
     </script>
 </body>

@@ -1,9 +1,12 @@
-
+/**
+ * @file 角色动作动画
+ * @author jingchaofang
+ */
 (function(ns){
 
 var heroAct = ns.heroAct = Hilo.Class.create({
     Extends: Hilo.Sprite,
-    constructor: function(properties){
+    constructor: function(properties) {
         heroAct.superclass.constructor.call(this, properties);
         this.addFrame(properties.atlas.getSprite('heroAct'));
         this.x = 360;
@@ -16,7 +19,11 @@ var heroAct = ns.heroAct = Hilo.Class.create({
     action: function() {
         this.play();
         this.visible = 1;
-        Hilo.Tween.to(this, {visible:0}, {delay:300, reverse:false, loop:false});
+        Hilo.Tween.to(
+            this,
+            {visible:0},
+            {delay:300,reverse:false,loop:false}
+        );
     }
 });
 
@@ -27,7 +34,7 @@ var heroAct = ns.heroAct = Hilo.Class.create({
 
 var npcAct = ns.npcAct = Hilo.Class.create({
     Extends: Hilo.Sprite,
-    constructor: function(properties){
+    constructor: function(properties) {
         npcAct.superclass.constructor.call(this, properties);
         this.addFrame(properties.atlas.getSprite('npcAct'));
         this.x = 34;
@@ -40,7 +47,11 @@ var npcAct = ns.npcAct = Hilo.Class.create({
     action: function() {
         this.visible = 1;
         this.play();
-        Hilo.Tween.to(this, {visible:0}, {delay:300, reverse:false, loop:false});
+        Hilo.Tween.to(
+            this,
+            {visible:0},
+            {delay:300, reverse:false, loop:false}
+        );
     }
 });
 

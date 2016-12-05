@@ -1,5 +1,6 @@
 /**
  * @file 游戏主控制台
+ * @author jingchaofang
  */
 (function() {
 
@@ -9,30 +10,38 @@ window.onload = function(){
 }
 
 var game = window.game = {
-
+    // 舞台宽高
     width: 0,
     height: 0,
-
+    // 资源
     asset: null,
+    // 舞台
     stage: null,
+    // 定时器
     ticker: null,
     // 游戏状态
     state: null,
-    // 游戏结果
+    // 玩家分数
     heroScore: 0,
+    // 非游戏玩家分数
     npcScore: 0,
+    // 是否重新开始
     isRestart: false,
+    // 开始时间
     startT: 0,
+    // 现在时间
     nowT: 0,
+    // 游戏持续时间
     intervalT: 0,
+    // 开始倒计时图片
     startSprite: null,
     start: null,
-    holdbacks: null,
     // 游戏准备开始场景
     gameReadyScene: null,
     // 游戏结束场景
     gameOverScene: null,
 
+    // 初始游戏
     init: function() {
         this.asset = new game.Asset();
         this.asset.on('complete', function(e){
@@ -42,10 +51,10 @@ var game = window.game = {
         this.asset.load();
     },
 
-    // 初始化舞台
+    // 初始舞台
     initStage: function() {
         this.width = 720;
-        this.height = 1280; //1278
+        this.height = 1280;
         this.scale = window.document.documentElement.clientWidth/720;
 
         // 舞台
@@ -58,21 +67,18 @@ var game = window.game = {
         });
 
         document.body.appendChild(this.stage.canvas);
-        var loaded = false;
        
         this.ticker = new Hilo.Ticker(60);
         this.ticker.addTick(Hilo.Tween);
         this.ticker.addTick(this.stage);
         this.ticker.start();
-        
-        
-        // 擂台和角色
-        this.initScene();
-        // 初始化角色
-        this.initNpcAct();
-        this.initHeroAct();   
         // 金币和飞镖
         this.initGD();
+        // 擂台和角色
+        this.initScene();
+        // 初始化角色动作动画
+        this.initNpcAct();
+        this.initHeroAct();
 
         // 准备游戏
         if (typeof beforeGame == 'function' && !beforeGame()){
@@ -88,8 +94,18 @@ var game = window.game = {
             height: this.height,
             image: this.asset.ring,
             role: this.asset.roleImage,
-            gd: this.asset.gd
+            gd: this.asset.gd,
+            result: this.asset.result
         }).addTo(this.stage);
+
+        this.currentScore = new Hilo.BitmapText({
+            id: 'score',
+            glyphs: this.asset.numberGlyphs,
+            text: 4
+        }).addTo(this.stage);
+        this.currentScore.x = 634;
+        this.currentScore.y = 1130;
+        this.currentScore.visible = 0;
     },
     // 初始化主角动作
     initHeroAct: function() {
@@ -130,75 +146,110 @@ var game = window.game = {
     },
     // 准备游戏
     gameReady: function() {
+
+        // 第一次游戏
         if (!this.isRestart) {
             this.isRestart = true;
-            // 倒计时
+            // 初始化倒计时开始
             this.initStart();
-            // 开启事件
+            // 等待4000毫秒倒计时结束开启并绑定事件
             var self = this;
             var t = setTimeout(function(){
                  self.stage.enableDOMEvent(Hilo.event.POINTER_START, true);
             },4000);
-            
             this.stage.on(Hilo.event.POINTER_START, this.onUserInput.bind(this));
+
             // 舞台更新
             this.stage.onUpdate = this.onUpdate.bind(this);
+
+            // 开启倒计时动画
+            this.start.getReady();
         }
         
-
         this.gameReadyScene.getChildById('heroReady').visible = 0;
         Hilo.Tween.to(this.gameReadyScene.getChildById('heroReady'), {visible:1}, {delay:400, reverse:false, loop:false});
       
-        // 烟雾效果
+        // 初始烟雾登场效果
         this.initSmoke();
         this.startT = +new Date();
         this.npcScore = 0;
         this.heroScore = 0;
         this.state = 'ready';
-        // console.log(this.state);
-        this.score = 0;
-        // NPC定时动作,TODO:NPC4000延迟毫秒开始防未开始前触发金币和飞镖
+
+
+        // NPC定时动作
         var self = this;
-        self.t = setInterval(function(){
-            self.gameReadyScene.getChildById('npcReady').visible = 0;
+        var gdY = self.gd.y >> 0;
+        var npcReady = self.gameReadyScene.getChildById('npcReady');
+        var npcDead = self.gameReadyScene.getChildById('npcDead');
+        var heroReady = self.gameReadyScene.getChildById('heroReady');
+        var heroVictory = self.gameReadyScene.getChildById('heroVictory');
+        var resultHeroV = self.gameReadyScene.getChildById('resultHeroV');
+
+        self.t = setInterval(function() {
+
+            npcReady.visible = 0;
             self.npcAct.action();
+            Hilo.Tween.to(npcReady, {visible:1}, {delay:300, reverse:false, loop:false});
 
-            Hilo.Tween.to(self.gameReadyScene.getChildById('npcReady'), {visible:1}, {delay:300, reverse:false, loop:false});
-
-            var gdY = self.gd.y >> 0;
+            // 金币到达指定范围
             if (gdY > 700 && gdY < 800 ) {
                 self.gd.gold.visible = 0;
                 self.npcScore +=1;
-                console.log("npcScore:" + self.npcScore);
             }
-            
+            // 飞镖到达指定范围
             else if (gdY > 810 && gdY < 890) {
                 self.gd.dart.visible = 0;
-                Hilo.Tween.to(self.gameReadyScene.getChildById('npcReady'), {visible:0}, {delay:300, reverse:false, loop:false});
-                Hilo.Tween.to(self.gameReadyScene.getChildById('npcDead'), {visible:1}, {delay:300, reverse:false, loop:false});
-                Hilo.Tween.to(self.gameReadyScene.getChildById('heroReady'), {visible:0}, {delay:300, reverse:false, loop:false});
-                Hilo.Tween.to(self.gameReadyScene.getChildById('heroVictory'), {visible:1}, {delay:300, reverse:false, loop:false});
-                self.gameOver();
-                // self.gameOver({result:"lose"});
+                Hilo.Tween.to(npcReady, {visible:0}, {delay:300, reverse:false, loop:false});
+                Hilo.Tween.to(npcDead, {visible:1}, {delay:300, reverse:false, loop:false});
+                Hilo.Tween.to(heroReady, {visible:0}, {delay:300, reverse:false, loop:false});
+                Hilo.Tween.to(heroVictory, {visible:1}, {delay:300, reverse:false, loop:false});
+                Hilo.Tween.to(resultHeroV, {visible:1}, {delay:300, reverse:false, loop:false});
+                self.gameOver({result:'win'}); // 不用传status
             }
-        },3000); // 3600可测试中镖 3400测试金币
+
+        }, 3000); // 3600可测试中镖 3400测试金币
 
         // this.currentScore.visible = true;
         // this.currentScore.setText(this.score);
-        this.gameReadyScene.visible = true;
+
+        // 金币飞镖重置
         this.gd.reset();
+        // 开启烟雾动画
         this.smoke.getReady();
-        this.start.getReady();
+        
+        // 开启金币飞镖移动动画
         this.gd.startMove();
+        
     },
+    // 游戏结束
     gameOver: function(data) {
+
         if(this.state !== 'over'){
             // 设置当前状态为结束over
+            clearInterval(this.t);
             this.state = 'over';
             this.gd.stopMove();
 
-            clearInterval(this.t);
-            console.log('游戏结束');
+            if(data.status == 'draw'){
+                Hilo.Tween.to(this.gameReadyScene.getChildById('resultDraw'), {visible:1}, {delay:300, reverse:false, loop:false});
+                console.log('平了');
+            }else if (data.status == 'win') {
+                Hilo.Tween.to(this.gameReadyScene.getChildById('npcReady'), {visible:0}, {delay:300, reverse:false, loop:false});
+                Hilo.Tween.to(this.gameReadyScene.getChildById('heroReady'), {visible:0}, {delay:300, reverse:false, loop:false});
+                Hilo.Tween.to(this.gameReadyScene.getChildById('resultHeroV'), {visible:1}, {delay:300, reverse:false, loop:false});
+                Hilo.Tween.to(this.gameReadyScene.getChildById('heroVictory'), {visible:1}, {delay:300, reverse:false, loop:false});
+                Hilo.Tween.to(this.gameReadyScene.getChildById('npcDefeat'), {visible:1}, {delay:300, reverse:false, loop:false});
+                console.log('赢了');
+            }else if (data.status == 'lose') {
+                Hilo.Tween.to(this.gameReadyScene.getChildById('npcReady'), {visible:0}, {delay:300, reverse:false, loop:false});
+                Hilo.Tween.to(this.gameReadyScene.getChildById('heroReady'), {visible:0}, {delay:300, reverse:false, loop:false});
+                Hilo.Tween.to(this.gameReadyScene.getChildById('resultNpcV'), {visible:1}, {delay:300, reverse:false, loop:false});
+                Hilo.Tween.to(this.gameReadyScene.getChildById('npcVictory'), {visible:1}, {delay:300, reverse:false, loop:false});
+                Hilo.Tween.to(this.gameReadyScene.getChildById('heroDefeat'), {visible:1}, {delay:300, reverse:false, loop:false});
+                console.log('输了');
+            }
+            
             if(typeof(gameOverCallback) == 'function'){
                 gameOverCallback(data);
             }
@@ -208,55 +259,103 @@ var game = window.game = {
     // 用户点击交互
     onUserInput: function(e){
         if(this.state !== 'over') {
-            if(this.state !== 'playing'){
-                this.gameStart();
-            }
+            this.gameStart();
         }
         var gdY = this.gd.y;
         if (gdY > 700 && gdY < 800 ) {
+            this.stage.enableDOMEvent(Hilo.event.POINTER_START, false);
             this.gd.gold.visible = 0;
-            this.heroScore +=1;
+            this.heroScore += 1;
+
+            switch(this.heroScore) {
+                case 1:
+                this.gameReadyScene.getChildById('golded1').visible = 1;
+                break;
+                case 2:
+                this.gameReadyScene.getChildById('golded2').visible = 1;
+                break;
+                case 3:
+                this.gameReadyScene.getChildById('golded3').visible = 1;
+                break;
+                case 4:
+                this.gameReadyScene.getChildById('goldCal').visible = 1;
+                this.currentScore.visible = 1;
+                break;
+                case 5:
+                this.gameReadyScene.getChildById('goldCal').visible = 1;
+                this.currentScore.setText(5);
+                break;
+                case 6:
+                this.gameReadyScene.getChildById('goldCal').visible = 1;
+                this.currentScore.setText(6);
+                break;
+                case 7:
+                this.gameReadyScene.getChildById('goldCal').visible = 1;
+                this.currentScore.setText(7);
+                break;
+                case 8:
+                this.gameReadyScene.getChildById('goldCal').visible = 1;
+                this.currentScore.setText(8);
+                break;
+                case 9:
+                this.gameReadyScene.getChildById('goldCal').visible = 1;
+                this.currentScore.setText(9);
+                break;
+            }
+            
         }
-        else if (gdY > 810 && gdY < 890) {  // 主角中飞镖
+        else if (gdY > 810 && gdY < 890) { // 主角中飞镖
+            this.stage.enableDOMEvent(Hilo.event.POINTER_START, false);
             this.gd.dart.visible = 0;
             Hilo.Tween.to(this.gameReadyScene.getChildById('heroReady'), {visible:0}, {delay:300, reverse:false, loop:false});
             Hilo.Tween.to(this.gameReadyScene.getChildById('heroDead'), {visible:1}, {delay:300, reverse:false, loop:false});
             Hilo.Tween.to(this.gameReadyScene.getChildById('npcReady'), {visible:0}, {delay:300, reverse:false, loop:false});
             Hilo.Tween.to(this.gameReadyScene.getChildById('npcVictory'), {visible:1}, {delay:300, reverse:false, loop:false});
-            this.gameOver({result:'lose'});
-        }  
+            Hilo.Tween.to(this.gameReadyScene.getChildById('resultNpcV'), {visible:1}, {delay:300, reverse:false, loop:false});
+            this.gameOver({result:'lose'}); // 不用传status
+        }
         
     },
     gameStart: function() {
-        this.gameReadyScene.getChildById('heroReady').visible = 0;
+        var heroReady = this.gameReadyScene.getChildById('heroReady');
+        heroReady.visible = 0;
         this.heroAct.action();
-        Hilo.Tween.to(this.gameReadyScene.getChildById('heroReady'), {visible:1}, {delay:300, reverse:false, loop:false});
+        Hilo.Tween.to(heroReady, {visible:1}, {delay:300, reverse:false, loop:false});
     },
     // 再玩一次
     gameRestart: function() {
         this.gameReadyScene.getChildById('npcVictory').visible = 0;
+        this.gameReadyScene.getChildById('npcDefeat').visible = 0;
+        this.gameReadyScene.getChildById('resultNpcV').visible = 0;
+        this.gameReadyScene.getChildById('resultHeroV').visible = 0;
+        this.gameReadyScene.getChildById('resultDraw').visible = 0;
         this.gameReadyScene.getChildById('heroVictory').visible = 0;
+        this.gameReadyScene.getChildById('heroDefeat').visible = 0;
         this.gameReadyScene.getChildById('heroDead').visible = 0;
         this.gameReadyScene.getChildById('npcDead').visible = 0;
         this.gameReadyScene.getChildById('heroReady').visible = 1;
         this.gameReadyScene.getChildById('npcReady').visible = 1;
+        this.start.visible = 0;
         this.gameReady();
     },
-    onUpdate: function(){
+    onUpdate: function() {
         this.nowT = +new Date();
         this.intervalT = this.nowT - this.startT;
-        if(this.intervalT > 30000 && this.intervalT < 30100){
+        if(this.intervalT > 30000 && this.intervalT < 30050){
             console.log('时间到了');
             if (this.heroScore > this.npcScore){
                 console.log('赢了');
-                this.gameOver({result:'win'});
+                this.gameOver({result:'win', status:'win'});
             }else if(this.heroScore == this.npcScore) {
-                this.gameOver({result:'lose'});
-                console.log('平了');
+                this.gameOver({result:'lose', status: 'draw'});
             }else {
-                this.gameOver({result:'lose'});
+                this.gameOver({result:'lose', status:'lose'});
                 console.log('输了');
             }
+        }
+
+        if((this.gd.y > 800 && this.gd.y < 810) || this.gd.y > 0 && this.gd.y < 10) {
+            this.stage.enableDOMEvent(Hilo.event.POINTER_START, true);
         }
     }
 

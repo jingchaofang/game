@@ -18,13 +18,16 @@ var Asset = ns.Asset = Hilo.Class.create({
 
     // 资源队列加载
     load: function(){
+
         var resources = [
             {id:'bg', src:'i/bg.png'},
             {id:'startSprite', src:'i/start_sprite.png'},
             {id:'ring', src:'i/ring.png'},
             {id:'role', src:'i/role.png'},
             {id:'smoke', src:'i/smoke.png'},
-            {id:'gd', src:'i/gd.png'}
+            {id:'gd', src:'i/gd.png'},
+            {id:'result', src:'i/result.png'},
+            {id:'number', src:'i/number.png'}
         ];
 
         this.queue = new Hilo.LoadQueue();
@@ -77,10 +80,12 @@ var Asset = ns.Asset = Hilo.Class.create({
                 heroDead: [5],
                 npcDead: [11],
                 heroVictory: [4],
-                npcVictory: [10]
+                npcVictory: [10],
+                heroDefeat: [3],
+                npcDefeat: [9]
             }
         });
-        // 主角登场烟雾特效
+        // 主角登场烟雾效果
         this.smoke = new Hilo.TextureAtlas({
             image: this.queue.get('smoke').content,
             frames: [
@@ -94,6 +99,17 @@ var Asset = ns.Asset = Hilo.Class.create({
         });
         // 金币和飞镖
         this.gd = this.queue.get('gd').content;
+        this.result = this.queue.get('result').content;
+
+        var number = this.queue.get('number').content;
+        this.numberGlyphs = {
+            4: {image:number, rect:[0,0,21,34]},
+            5: {image:number, rect:[21,0,21,34]},
+            6: {image:number, rect:[42,0,21,34]},
+            7: {image:number, rect:[63,0,21,34]},
+            8: {image:number, rect:[84,0,21,34]},
+            9: {image:number, rect:[105,0,21,34]}
+        };
 
         this.queue.off('complete');
         this.fire('complete');

@@ -285,7 +285,7 @@ var ReadyScene = ns.ReadyScene = Hilo.Class.create({
 
         cursor.x = 530;
         cursor.y = 920;
-        cursor.visible = 1;
+        cursor.visible = 0;
         cursor.scaleX = 0.5;
         cursor.scaleY = 0.5;
         
@@ -321,13 +321,13 @@ var ReadyScene = ns.ReadyScene = Hilo.Class.create({
         );
         Hilo.Tween.to(
             cursor,
-            {scaleX:1,scaleY:1,alpha:0,pivotX:24,pivotY:24},
-            {delay:0,duration:1000, reverse:false, loop:true,ease:Hilo.Ease.Quad.EaseIn}
+            {scaleX:1,scaleY:1,alpha:0,pivotX:24,pivotY:24,visible:1},
+            {delay:4000,duration:1000, reverse:false, loop:true,ease:Hilo.Ease.Quad.EaseIn}
         );
         Hilo.Tween.to(
             cursor,
             {visible:0},
-            {delay:4000,reverse:false,loop:true,ease:Hilo.Ease.Quad.EaseOut}
+            {delay:7000,reverse:false,loop:true,ease:Hilo.Ease.Quad.EaseOut}
         );
     }
 });

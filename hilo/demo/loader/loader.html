@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src='../hilo-standalone.min.js'></script>
+    <script>
+    window.onload = function() {
+
+        window.requestAnimFrame = (function() {
+            return window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.oRequestAnimationFrame ||
+                window.msRequestAnimationFrame ||
+                function(callback) {
+                    window.setTimeout(callback, 1000 / 60);
+                };
+        })();
+
+        var stage = new Hilo.Stage({
+            container: document.body,
+            width: innerWidth,
+            height: innerHeight
+        });
+
+        var ticker = new Hilo.Ticker(60);
+        ticker.addTick(Hilo.Tween);
+        ticker.addTick(stage);
+        ticker.start();
+
+        // var di = new Hilo.Graphics({
+        //     lineWidth: 10
+        // });
+        // stage.addChild(di);
+        // di.drawRoundRect(26, 43, 598, 25, 12.5);
+        // di.beginFill('#000');
+        // di.lineStyle(1,'#000');
+        // di.endFill();
+        // var widths = 0;
+
+        // var gun = new Hilo.Graphics({});
+        // stage.addChild(gun);
+
+        // function draw() {
+        //     widths += (597 - 23) / 272;
+        //     console.log(widths);
+        //     gun.beginFill('#ff0202');
+        //     gun.drawRoundRect(27, 44, 23 + widths, 23, 11.5);
+        //     gun.endFill();
+        //     if (widths + 23 > 596) {
+        //         clearInterval(t);
+        //         return;
+        //     }
+        // }
+        // var t = setInterval(draw, 100);
+
+        // var cdnum = 30;
+        // var cd = new Hilo.Text({
+        //     font: "bold 43px arial,sans-serif",
+        //     textAlign:'right',
+        //     textVAlign:'middle',
+        //     width: 720,
+        //     height: 110,
+        //     text:'30s'
+        // });
+        // cd.addTo(stage);
+
+        // function countDown(){
+        //     console.log(cdnum);
+        //     cdnum = cdnum - 1;
+        //     cdtext = cdnum + 's';
+        //     cd.text = cdtext;
+        //     if(cdnum == 0) {
+        //         clearInterval(cdt);
+        //         return;
+        //     }
+        // }
+        // var cdt = setInterval(countDown,1000);
+
+
+        var countdown = new Hilo.Graphics({alpha : 0.5,scaleX : 1,x:200});
+        countdown.beginFill('#f00');
+        countdown.drawRect(0,10,400,10);
+        countdown.endFill();
+        stage.addChild(countdown);
+        var ticker = new Hilo.Ticker(1);
+        countdown.tick = function(){
+            console.log(countdown);
+            countdown.scaleX -= 0.02;
+            console.log(countdown.scaleX);
+            //使用缩放时,需要移动countdown的X的值  偏差为scaleX * left
+        }
+        ticker.addTick(countdown);
+        ticker.start();
+    }
+    </script>
+</body>
+
+</html>
+<!-- var H = Hilo;
+var stage = new Hilo.Stage({
+    container:document.body,
+    width:innerWidth,
+    height:innerHeight
+});
+
+var ticker = new Hilo.Ticker(60);
+ticker.addTick(stage);
+ticker.start();
+
+var pointLine_1 = this.pointLine_1 = new Hilo.Graphics({lineWidth: 10});
+stage.addChild(pointLine_1);
+pointLine_1.x = 0;
+pointLine_1.y = 0;
+
+this.pointLine_1.lineStyle(6, "#0ff");
+this.pointLine_1.moveTo(0, 200);
+this.pointLine_1.lineTo(100, 0);
+this.pointLine_1.endFill(); -->

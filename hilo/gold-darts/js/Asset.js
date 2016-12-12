@@ -27,7 +27,9 @@ var Asset = ns.Asset = Hilo.Class.create({
             {id:'smoke', src:'i/smoke.png'},
             {id:'gd', src:'i/gd.png'},
             {id:'result', src:'i/result.png'},
-            {id:'number', src:'i/number.png'}
+            {id:'number', src:'i/number.png'},
+            {id:'tag', src:'i/tag.png'},
+            {id:'cursor', src:'i/cursor.png'}
         ];
 
         this.queue = new Hilo.LoadQueue();
@@ -73,8 +75,6 @@ var Asset = ns.Asset = Hilo.Class.create({
                 [1410, 328, 293, 307]
             ],
             sprites: {
-                hero: [0, 1, 2, 3, 4, 5],
-                npc: [6, 7, 8, 9, 10, 11],
                 heroAct: [1],
                 npcAct: [7],
                 heroDead: [5],
@@ -110,6 +110,9 @@ var Asset = ns.Asset = Hilo.Class.create({
             8: {image:number, rect:[84,0,21,34]},
             9: {image:number, rect:[105,0,21,34]}
         };
+
+        this.tag = this.queue.get('tag').content;
+        this.cursor = this.queue.get('cursor').content;
 
         this.queue.off('complete');
         this.fire('complete');

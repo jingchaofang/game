@@ -13,6 +13,13 @@ var Hilo = window.Hilo;
  * @module hilo/tween/Ease
  * @static
  */
+
+/**
+ * @language=zh
+ * @class Ease类包含为Tween类提供各种缓动功能的函数。
+ * @module hilo/tween/Ease
+ * @static
+ */
 var Ease = (function(){
 
 function createEase(obj, easeInFn, easeOutFn, easeInOutFn, easeNoneFn){
@@ -28,6 +35,11 @@ function createEase(obj, easeInFn, easeOutFn, easeInOutFn, easeNoneFn){
  * @language=en
  * Linear easing function.Include EaseNone.
  */
+
+/**
+ * @language=zh
+ * 线性匀速缓动函数。包含EaseNone函数。
+ */
 var Linear = createEase(null, null, null, null, function(k){
     return k;
 });
@@ -35,6 +47,11 @@ var Linear = createEase(null, null, null, null, function(k){
 /**
  * @language=en
  * Quad easing function.Include EaseIn, EaseOut, EaseInOut.
+ */
+
+/**
+ * @language=zh
+ * 二次缓动函数。包含EaseIn、EaseOut、EaseInOut三个函数。
  */
 var Quad = createEase(null,
     function(k){
@@ -54,6 +71,11 @@ var Quad = createEase(null,
  * @language=en
  * Cubic easing function.Include EaseIn, EaseOut, EaseInOut.
  */
+
+/**
+ * @language=zh
+ * 三次缓动函数。包含EaseIn、EaseOut、EaseInOut三个函数。
+ */
 var Cubic = createEase(null,
     function(k){
         return k * k * k;
@@ -72,6 +94,11 @@ var Cubic = createEase(null,
  * @language=en
  * Quart easing function.Include EaseIn, EaseOut, EaseInOut.
  */
+
+/**
+ * @language=zh
+ * 四次缓动函数。包含EaseIn、EaseOut、EaseInOut三个函数。
+ */
 var Quart = createEase(null,
     function(k){
         return k * k * k * k;
@@ -89,6 +116,11 @@ var Quart = createEase(null,
 /**
  * @language=en
  * Quint easing function.Include EaseIn, EaseOut, EaseInOut.
+ */
+
+/**
+ * @language=zh
+ * 五次缓动函数。包含EaseIn、EaseOut、EaseInOut三个函数。
  */
 var Quint = createEase(null,
     function(k){
@@ -113,6 +145,11 @@ var math = Math,
  * @language=en
  * Sine easing function.Include EaseIn, EaseOut, EaseInOut.
  */
+
+/**
+ * @language=zh
+ * 正弦缓动函数。包含EaseIn、EaseOut、EaseInOut三个函数。
+ */
 var Sine = createEase(null,
     function(k){
         return -cos(k * HALF_PI) + 1;
@@ -130,6 +167,11 @@ var Sine = createEase(null,
 /**
  * @language=en
  * Expo easing function.Include EaseIn, EaseOut, EaseInOut.
+ */
+
+/**
+ * @language=zh
+ * 指数缓动函数。包含EaseIn、EaseOut、EaseInOut三个函数。
  */
 var Expo = createEase(null,
     function(k){
@@ -151,6 +193,11 @@ var Expo = createEase(null,
  * @language=en
  * Circ easing function.Include EaseIn, EaseOut, EaseInOut.
  */
+
+/**
+ * @language=zh
+ * 圆形缓动函数。包含EaseIn、EaseOut、EaseInOut三个函数。
+ */
 var Circ = createEase(null,
     function(k){
         return -(sqrt(1 - k * k) - 1);
@@ -169,6 +216,11 @@ var Circ = createEase(null,
 /**
  * @language=en
  * Elastic easing function.Include EaseIn, EaseOut, EaseInOut.
+ */
+
+/**
+ * @language=zh
+ * 弹性缓动函数。包含EaseIn、EaseOut、EaseInOut三个函数。
  */
 var Elastic = createEase(
     {
@@ -201,6 +253,11 @@ var Elastic = createEase(
  * @language=en
  * Back easing function.Include EaseIn, EaseOut, EaseInOut.
  */
+
+/**
+ * @language=zh
+ * 向后缓动函数。包含EaseIn、EaseOut、EaseInOut三个函数。
+ */
 var Back = createEase(
     {
         o: 1.70158,
@@ -228,6 +285,11 @@ var Back = createEase(
 /**
  * @language=en
  * Bounce easing function.Include EaseIn, EaseOut, EaseInOut.
+ */
+
+/**
+ * @language=zh
+ * 弹跳缓动函数。包含EaseIn、EaseOut、EaseInOut三个函数。
  */
 var Bounce = createEase(null,
     function(k){

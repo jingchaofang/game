@@ -56,7 +56,7 @@ var GD = ns.GD = Hilo.Class.create({
         dart.y = gold.y - 120;
     },
     // 重置位置
-    resetGD: function(){
+    resetGD: function() {
         var total = this.children.length;
         for(var i = 0; i < this.numOffscreenGDs; i++){
             var dart = this.getChildAt(0);
@@ -73,11 +73,12 @@ var GD = ns.GD = Hilo.Class.create({
         
     },
     // 开始移动
-    startMove: function(){
+    startMove: function() {
         var targetY = 1080;
         Hilo.Tween._tweens.push(this.moveTween);
         // 设置缓动时间
-        this.moveTween.duration -= 140;
+        this.moveTween.duration -= 250;
+        // this.moveTween.duration = 4000;
         if(this.firstStartGd){
             this.firstStartGd = false;
             this.moveTween.delay = 4000;

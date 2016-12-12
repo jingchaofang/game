@@ -9,7 +9,7 @@ var Smoke = ns.Smoke = Hilo.Class.create({
     constructor: function(properties){
         Smoke.superclass.constructor.call(this, properties);
         this.addFrame(properties.smoke.getSprite('smoke'));
-        this.interval = 10;
+        this.interval = 15;
         this.x = 320;
         this.y = 762;
         this.loop = false;
@@ -19,7 +19,8 @@ var Smoke = ns.Smoke = Hilo.Class.create({
     getReady: function(){
         this.visible = 1;
         this.play();
-        this.tween = Hilo.Tween.to(this, {visible:false}, {duration:400, reverse:false, loop:false});
+        Hilo.Tween.remove(this);
+        Hilo.Tween.to(this, {visible:false}, {duration:500, reverse:false, loop:false});
     }
 });
 
